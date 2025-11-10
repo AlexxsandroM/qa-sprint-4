@@ -10,10 +10,13 @@
 # Links
 
 [Azure Boards](https://dev.azure.com/RM557068/Eficientiza/_boards/board/t/Eficientiza%20Team/Backlog%20items) 
+Link
 
-[Link do video](https://www.youtube.com/watch?v=jtXooYZ6TsU)
+[Link do video explicando o projeto](https://www.youtube.com/watch?v=wkxnCdIYTLg) 
 
-[Link do deploy](https://java-sprint-4-0k9h.onrender.com) - https://java-sprint-4-0k9h.onrender.com
+[Link do video explicando o banco](https://www.youtube.com/watch?v=jtXooYZ6TsU)
+
+[Link do deploy](https://java-sprint-4-0k9h.onrender.com/login)
 
 ## Descrição
 
