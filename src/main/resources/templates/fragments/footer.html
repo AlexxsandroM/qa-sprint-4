@@ -1,0 +1,6 @@
+<!-- templates/fragments/footer.html -->
+<div th:fragment="footer" xmlns:th="http://www.w3.org/1999/xhtml">
+    <p class="mt-6 text-center text-xs text-neutral-500">
+        © <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2025</span> Eficientiza
+    </p>
+</div>

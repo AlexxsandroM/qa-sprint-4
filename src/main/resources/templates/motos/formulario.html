@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="${moto.id} != null ? 'Editar Moto • MotoMap AI' : 'Nova Moto • MotoMap AI'">Moto • MotoMap AI</title>
+
+    <!-- Tailwind CDN (dev). Em produção, gere o build do Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: {
+                  50:'#ecffee',100:'#c7ffd0',200:'#9effa9',300:'#72ff85',
+                  400:'#49f565',500:'#22d840',600:'#18b035',700:'#128a2c',
+                  800:'#0e6924',900:'#0b531e'
+                }
+              }
+            }
+          }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        html,body{height:100%}
+        body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-brand-400/40">
+<!-- BG decorativo -->
+<div class="pointer-events-none fixed inset-0 -z-10">
+    <div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,216,64,0.06),transparent_60%)]"></div>
+</div>
+
+<!-- header -->
+<header class="mx-auto max-w-4xl px-6 pt-8 pb-4">
+    <div class="flex items-center justify-between">
+        <a th:href="@{/motos}" class="inline-flex items-center gap-2 text-neutral-300 hover:text-neutral-100">
+            <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </div>
+            <span class="font-semibold">Voltar para Motos</span>
+        </a>
+        <a th:href="@{/logout}" class="text-sm text-neutral-400 hover:text-neutral-200 hover:underline">Sair</a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-4xl px-6 pb-16">
+    <div class="mb-6">
+        <h1 class="text-2xl font-extrabold tracking-tight"
+            th:text="${moto.id} != null ? 'Editar moto' : 'Nova moto'">Nova moto</h1>
+        <p class="mt-1 text-sm text-neutral-400">Preencha os dados abaixo e salve para continuar.</p>
+    </div>
+
+    <!-- Card do formulário -->
+    <div class="rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-xl shadow-black/20 backdrop-blur">
+        <form th:object="${moto}"
+              th:action="${moto.id} != null ? @{|/motos/alterar/${moto.id}|} : @{/motos/salvar}"
+              method="post" class="space-y-5" novalidate>
+
+            <!-- PLACA -->
+            <div>
+                <label for="placa" class="mb-1.5 block text-sm font-semibold text-neutral-200">Placa</label>
+                <input id="placa" th:field="*{placa}" type="text" placeholder="ABC1D23"
+                       class="w-full rounded-xl border border-neutral-700 bg-neutral-900/60 px-4 py-3 text-neutral-100 placeholder-neutral-500 outline-none transition
+                        focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30"
+                       oninput="this.value=this.value.toUpperCase()" maxlength="7"/>
+                <p class="mt-1 text-xs text-red-300" th:if="${#fields.hasErrors('placa')}" th:errors="*{placa}">Erro</p>
+            </div>
+
+            <!-- MODELO e COR -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                    <label for="modelo" class="mb-1.5 block text-sm font-semibold text-neutral-200">Modelo</label>
+                    <input id="modelo" th:field="*{modelo}" type="text" placeholder="CG 160 Start"
+                           class="w-full rounded-xl border border-neutral-700 bg-neutral-900/60 px-4 py-3 text-neutral-100 placeholder-neutral-500 outline-none transition
+                          focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30"/>
+                    <p class="mt-1 text-xs text-red-300" th:if="${#fields.hasErrors('modelo')}" th:errors="*{modelo}">Erro</p>
+                </div>
+
+                <div>
+                    <label for="cor" class="mb-1.5 block text-sm font-semibold text-neutral-200">Cor</label>
+                    <input id="cor" th:field="*{cor}" type="text" placeholder="Preta"
+                           class="w-full rounded-xl border border-neutral-700 bg-neutral-900/60 px-4 py-3 text-neutral-100 placeholder-neutral-500 outline-none transition
+                          focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30"/>
+                    <p class="mt-1 text-xs text-red-300" th:if="${#fields.hasErrors('cor')}" th:errors="*{cor}">Erro</p>
+                </div>
+            </div>
+
+            <!-- ANO e STATUS -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                    <label for="ano" class="mb-1.5 block text-sm font-semibold text-neutral-200">Ano</label>
+                    <input id="ano" th:field="*{ano}" type="number" min="1900" max="2100" placeholder="2024"
+                           class="w-full rounded-xl border border-neutral-700 bg-neutral-900/60 px-4 py-3 text-neutral-100 placeholder-neutral-500 outline-none transition
+                          focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30"/>
+                    <p class="mt-1 text-xs text-red-300" th:if="${#fields.hasErrors('ano')}" th:errors="*{ano}">Erro</p>
+                </div>
+
+                <div>
+                    <label for="status" class="mb-1.5 block text-sm font-semibold text-neutral-200">Status</label>
+
+                    <div class="relative">
+                        <select id="status" th:field="*{status}"
+                                class="w-full appearance-none rounded-xl border border-neutral-700 bg-neutral-900/60 px-4 py-3 pr-12
+                   text-neutral-100 outline-none transition
+                   focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30
+                   disabled:opacity-60 disabled:cursor-not-allowed">
+                            <option value="" disabled th:selected="${moto.status == null}" class="text-neutral-500">
+                                Selecione...
+                            </option>
+                            <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" class="bg-neutral-900 text-neutral-100"></option>
+                        </select>
+
+                        <!-- seta custom -->
+                        <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 opacity-70 peer-focus:opacity-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.29a.75.75 0 0 1 .02-1.08z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VAGA -->
+            <div>
+                <label for="vaga" class="mb-1.5 block text-sm font-semibold text-neutral-200">Vaga</label>
+                <input id="vaga" th:field="*{vaga}" type="text" placeholder="V12"
+                       class="w-full rounded-xl border border-neutral-700 bg-neutral-900/60 px-4 py-3 text-neutral-100 placeholder-neutral-500 outline-none transition
+                        focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30"/>
+                <p class="mt-1 text-xs text-red-300" th:if="${#fields.hasErrors('vaga')}" th:errors="*{vaga}">Erro</p>
+            </div>
+
+            <!-- Ações -->
+            <div class="flex flex-col-reverse items-stretch gap-3 pt-2 sm:flex-row sm:items-center sm:justify-end">
+                <a th:href="@{/motos}"
+                   class="inline-flex items-center justify-center rounded-xl border border-neutral-700 bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-neutral-200 transition hover:border-neutral-600">
+                    Cancelar
+                </a>
+                <button type="submit"
+                        class="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-2.5 text-sm font-semibold text-neutral-900 shadow-lg shadow-brand-500/20 transition hover:bg-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                    Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Rodapé -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</main>
+</body>
+</html>

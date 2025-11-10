@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Utilidades • MotoMap AI</title>
+
+    <!-- Tailwind CDN (dev). Em produção, gere o build do Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50:'#ecffee',100:'#c7ffd0',200:'#9effa9',300:'#72ff85',
+                            400:'#49f565',500:'#22d840',600:'#18b035',700:'#128a2c',
+                            800:'#0e6924',900:'#0b531e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        html,body{height:100%}
+        body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-brand-400/40">
+<!-- BG decorativo -->
+<div class="pointer-events-none fixed inset-0 -z-10">
+    <div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,216,64,0.06),transparent_60%)]"></div>
+</div>
+
+<header class="mx-auto max-w-6xl px-6 pt-8 pb-4">
+    <div class="flex items-center justify-between">
+        <a th:href="@{/home}" class="inline-flex items-center gap-2 text-neutral-300 hover:text-neutral-100">
+            <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M6 12l3-3m-3 3l3 3m12 0l-3-3m3 3l-3 3"/>
+                </svg>
+            </div>
+            <span class="font-semibold">MotoMap <span class="text-brand-400">AI</span></span>
+        </a>
+
+        <a th:href="@{/logout}" class="text-sm text-neutral-400 hover:text-neutral-200 hover:underline">Sair</a>
+    </div>
+</header>
+
+<main class="mx-auto max-w-6xl px-6 pb-16">
+    <!-- Título -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-extrabold tracking-tight">Utilidades</h1>
+        <p class="mt-1 text-sm text-neutral-400">Ferramentas de consulta e apoio operacional.</p>
+    </div>
+
+    <!-- GRID: duas áreas na mesma página -->
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+
+        <!-- =========================
+     1) Listar Ocupações
+========================== -->
+        <div class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/60 shadow-xl shadow-black/20 backdrop-blur">
+            <!-- Cabeçalho -->
+            <div class="border-b border-neutral-800 px-5 py-4">
+                <h2 class="text-lg font-semibold">Listar Ocupações</h2>
+                <p class="mt-1 text-xs text-neutral-400">Informe os filtros e liste as ocupações.</p>
+            </div>
+
+            <!-- Formulário -->
+            <div class="px-5 py-5">
+                <form th:action="@{/utilidades/ocupacoes}" method="get" class="space-y-4">
+                    <!-- Campo: ID_Estacao -->
+                    <div>
+                        <label for="estacaoId" class="mb-1 block text-sm text-neutral-300">ID da Estação</label>
+                        <input id="estacaoId" name="estacaoId" type="number" th:value="${fEstacaoId}"
+                               placeholder="Ex.: 1"
+                               class="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/40"/>
+                    </div>
+
+                    <!-- Campo: Somente ativas -->
+                    <div>
+                        <label for="somenteAtivas" class="mb-1 block text-sm text-neutral-300">Somente Ativas</label>
+                        <select id="somenteAtivas" name="somenteAtivas"
+                                class="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/40">
+                            <option th:selected="${fSomenteAtivas == null}" value="">Todas</option>
+                            <option value="S" th:selected="${fSomenteAtivas == 'S'}">Sim (apenas ativas)</option>
+                            <option value="N" th:selected="${fSomenteAtivas == 'N'}">Não (apenas finalizadas)</option>
+                        </select>
+                    </div>
+
+                    <!-- Campo: Limite -->
+                    <div>
+                        <label for="limit" class="mb-1 block text-sm text-neutral-300">Limite</label>
+                        <input id="limit" name="limit" type="number" min="1" th:value="${fLimit}"
+                               placeholder="Ex.: 100"
+                               class="w-full rounded-xl border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400/40"/>
+                    </div>
+
+                    <!-- Botão -->
+                    <div class="pt-2">
+                        <button type="submit"
+                                class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand-500/30 bg-neutral-900 px-4 py-2.5 text-sm font-semibold text-neutral-200 shadow-lg shadow-black/10 transition hover:border-brand-500/60 hover:bg-neutral-900/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                            Listar Ocupações
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Resultados -->
+            <div class="border-t border-neutral-800 px-5 py-5">
+                <div class="mb-3 text-sm text-neutral-400">Resultado:</div>
+
+                <div th:if="${#lists.isEmpty(lista)}"
+                     class="rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 text-center text-sm text-neutral-400">
+                    Nenhuma ocupação encontrada.
+                </div>
+
+                <div th:if="${!#lists.isEmpty(lista)}"
+                     class="space-y-3 text-sm text-neutral-300 max-h-[400px] overflow-y-auto">
+                    <div th:each="item : ${lista}"
+                         class="rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 hover:border-brand-400/40 transition">
+                        <div class="font-medium text-neutral-100 mb-2 flex justify-between">
+                            <span th:text="'Ocupação #' + ${item.id_ocupacao}">Ocupação #0</span>
+                            <span th:text="${item.dt_saida == null or item.dt_saida == '' ? 'Ativa' : 'Finalizada'}"
+                                  th:classappend="${item.dt_saida == null or item.dt_saida == '' ? 'text-green-400' : 'text-neutral-400'}">
+            Ativa
+          </span>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-xs text-neutral-400">
+                            <div>
+                                <span class="text-neutral-500">Entrada:</span>
+                                <span th:text="${item.dt_entrada}">2025-09-20T10:30:00</span>
+                            </div>
+                            <div>
+                                <span class="text-neutral-500">Saída:</span>
+                                <span th:text="${item.dt_saida != null && item.dt_saida != '' ? item.dt_saida : '-'}">-</span>
+                            </div>
+                            <div>
+                                <span class="text-neutral-500">Estação:</span>
+                                <span th:text="${item.nm_estacao}">Estacao X01</span>
+                            </div>
+                            <div>
+                                <span class="text-neutral-500">Vaga:</span>
+                                <span th:text="${item.ds_vaga}">V03</span>
+                            </div>
+                            <div>
+                                <span class="text-neutral-500">Placa:</span>
+                                <span class="font-mono" th:text="${item.ds_placa}">AAA1B03</span>
+                            </div>
+                            <div>
+                                <span class="text-neutral-500">Modelo:</span>
+                                <span th:text="${item.nm_modelo}">Modelo 03</span>
+                            </div>
+                            <div>
+                                <span class="text-neutral-500">Usuário:</span>
+                                <span th:text="${item.nm_usuario}">Usuario 03</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================
+     2) Listar ocupação em minutos das motos
+========================================== -->
+        <div class="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900/60 shadow-xl shadow-black/20 backdrop-blur">
+            <!-- Cabeçalho -->
+            <div class="border-b border-neutral-800 px-5 py-4">
+                <h2 class="text-lg font-semibold">Listar ocupação em minutos das motos</h2>
+                <p class="mt-1 text-xs text-neutral-400">Resumo por estação e vaga.</p>
+            </div>
+
+            <!-- Tabela -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full border-collapse text-sm">
+                    <thead>
+                    <tr class="bg-neutral-900/80 text-neutral-300">
+                        <th class="px-5 py-3 text-left font-semibold">Estação</th>
+                        <th class="px-5 py-3 text-left font-semibold">Vaga</th>
+                        <th class="px-5 py-3 text-left font-semibold">Minutos</th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="divide-y divide-neutral-800">
+                    <tr th:if="${#lists.isEmpty(resumo)}">
+                        <td colspan="3" class="px-5 py-3 text-center text-neutral-400">Sem dados.</td>
+                    </tr>
+
+                    <tr th:each="l : ${resumo}" th:if="${l.tipo.name() == 'DETALHE'}" class="hover:bg-neutral-900/50">
+                        <td class="px-5 py-3" th:text="${l.estacao}">1</td>
+                        <td class="px-5 py-3" th:text="${l.vaga}">3</td>
+                        <td class="px-5 py-3" th:text="${#numbers.formatDecimal(l.minutos, 0, 'COMMA', 2, 'POINT')}">68284.22</td>
+                    </tr>
+
+                    <!-- Linhas de subtotal/total (caso existam no futuro) -->
+                    <tr th:each="l : ${resumo}" th:if="${l.tipo.name() == 'SUBTOTAL'}" class="bg-neutral-900/70">
+                        <td colspan="3" class="px-5 py-3 font-semibold" th:text="${l.raw}">SUBTOTAL ...</td>
+                    </tr>
+                    <tr th:each="l : ${resumo}" th:if="${l.tipo.name() == 'TOTAL'}" class="bg-neutral-900">
+                        <td colspan="3" class="px-5 py-3 font-bold" th:text="${l.raw}">TOTAL ...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rodapé opcional -->
+            <div class="border-t border-neutral-800 px-5 py-3 text-right text-xs text-neutral-400">
+                *Dados gerados pela procedure <code>prc_resumo_ocupacao_minutos</code>.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Rodapé -->
+    <div class="mt-10" th:replace="~{fragments/footer :: footer}"></div>
+</main>
+</body>
+</html>

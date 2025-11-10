@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Eficientiza</title>
+
+    <!-- Tailwind CDN (dev). Em prod, gere o build do Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: {
+                  50:'#ecffee',100:'#c7ffd0',200:'#9effa9',300:'#72ff85',
+                  400:'#49f565',500:'#22d840',600:'#18b035',700:'#128a2c',
+                  800:'#0e6924',900:'#0b531e'
+                }
+              }
+            }
+          }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        html,body{height:100%} body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    </style>
+</head>
+<body class="min-h-screen bg-neutral-950 text-neutral-100 selection:bg-brand-400/40">
+<!-- BG decorativo -->
+<div class="pointer-events-none fixed inset-0 -z-10">
+    <div class="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-brand-500/20 blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,216,64,0.06),transparent_60%)]"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,transparent_95%,rgba(255,255,255,0.04)_95%),linear-gradient(to_bottom,transparent_95%,rgba(255,255,255,0.04)_95%)] bg-[size:20px_20px] opacity-[0.08]"></div>
+</div>
+
+<header class="mx-auto max-w-5xl px-6 pt-10 pb-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+
+            <h1 class="text-xl font-extrabold tracking-tight">Eficientiza <span class="text-brand-400">AI</span></h1>
+        </div>
+
+        <a th:href="@{/logout}" class="text-sm text-neutral-400 hover:text-neutral-200 hover:underline">Sair</a>
+    </div>
+</header>
+
+<main class="mx-auto flex min-h-[70vh] max-w-5xl items-center justify-center px-6 pb-16">
+    <section class="w-full">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl font-extrabold tracking-tight">Selecione um módulo</h2>
+            <p class="mt-2 text-sm text-neutral-400">Acesse rapidamente as áreas do sistema.</p>
+        </div>
+
+        <!-- GRID DE CARDS -->
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Card: Motos -->
+            <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_OPERADOR')" th:href="@{/motos}"
+               class="group relative rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-xl shadow-black/20 backdrop-blur transition
+                                      hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm12 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 14h12m-8-3 3-3 6 3" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold">Motos</h3>
+                <p class="mt-1 text-sm text-neutral-400">Cadastro e gestão de motos.</p>
+                <span class="pointer-events-none absolute right-4 top-4 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">➜</span>
+            </a>
+
+            <!-- Card: Histórico (somente para ADMIN) -->
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/historicos-moto}"
+               class="group relative rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-xl shadow-black/20 backdrop-blur transition
+                                      hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v5l3 2m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold">Histórico</h3>
+                <p class="mt-1 text-sm text-neutral-400">Movimentações das motos.</p>
+                <span class="pointer-events-none absolute right-4 top-4 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">➜</span>
+            </a>
+
+            <!-- Card: Vagas -->
+            <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_OPERADOR')" th:href="@{/vagas}"
+               class="group relative rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-xl shadow-black/20 backdrop-blur transition
+                                      hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16v12H4zM8 10h8M8 14h6"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold">Vagas</h3>
+                <p class="mt-1 text-sm text-neutral-400">Controle e status das vagas.</p>
+                <span class="pointer-events-none absolute right-4 top-4 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">➜</span>
+            </a>
+
+            <!-- Card: Utilidades -->
+            <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_OPERADOR')" th:href="@{/utilidades}"
+               class="group relative rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-xl shadow-black/20 backdrop-blur transition
+                              hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M4 6h16M4 12h8m-8 6h16"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold">Utilidades</h3>
+                <p class="mt-1 text-sm text-neutral-400">Ferramentas e recursos adicionais.</p>
+                <span class="pointer-events-none absolute right-4 top-4 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">➜</span>
+            </a>
+
+            <!-- Card: Usuários (somente para ADMIN) -->
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/usuarios}"
+               class="group relative rounded-2xl border border-neutral-800 bg-neutral-900/60 p-6 shadow-xl shadow-black/20 backdrop-blur transition
+                                      hover:-translate-y-0.5 hover:border-brand-500/50 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/50">
+                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-brand-400" fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM6 21a6 6 0 0 1 12 0"/>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold">Usuários</h3>
+                <p class="mt-1 text-sm text-neutral-400">Gerenciamento de acesso.</p>
+                <span class="pointer-events-none absolute right-4 top-4 opacity-0 transition group-hover:translate-x-1 group-hover:opacity-100">➜</span>
+            </a>
+        </div>
+    </section>
+</main>
+
+<footer class="pb-8 text-center text-xs text-neutral-500">
+    <!-- Rodapé -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>
