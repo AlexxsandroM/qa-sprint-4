@@ -10,7 +10,6 @@
 # Links
 
 [Azure Boards](https://dev.azure.com/RM557068/Eficientiza/_boards/board/t/Eficientiza%20Team/Backlog%20items) 
-Link
 
 [Link do video explicando o projeto](https://www.youtube.com/watch?v=wkxnCdIYTLg) 
 
